@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.tio.http.common.HeaderValue;
 import org.tio.http.common.HttpRequest;
 import org.tio.http.common.HttpResponse;
+import org.tio.http.common.MimeType;
 import org.tio.http.server.annotation.RequestPath;
 import org.tio.http.server.util.Resps;
 import org.tio.utils.http.HttpUtils;
@@ -119,8 +120,8 @@ public class MainController {
 	private HttpResponse returnM3U(HttpRequest request, String tmp) {
 		return Resps.string(request
 				, tmp
-				, "gb2312"
-				, HeaderValue.Content_Type.TEXT_PLAIN_TXT.value
+				, "utf-8"
+				, MimeType.AUDIO_XMPEQURL_M3U.getType()
 		);
 	}
 
@@ -133,7 +134,7 @@ public class MainController {
 			if (isNullString(onceLine)){
 				m3uBuilder.append("\n");
 			}else if (onceLine.startsWith("#EXTM3U")){
-				m3uBuilder.append("#EXTM3U\n");
+				m3uBuilder.append("#EXTM3U");
 			}else {
 				if (onceLine.startsWith("#EXTINF:")){
 					if (onceLine.contains("group-title")){
@@ -148,14 +149,14 @@ public class MainController {
 					if (!isNullString(tvName)){
 						tvName = tvNameMap.getOrDefault(tvName, tvName);
 						m3uBuilder.append(onceLine, 0, onceLine.indexOf("group-title="))
-								.append(" group-title=\"")
+								.append("group-title=\"")
 								.append(tvGroupMap.getOrDefault(tvName, state_Group))
 								.append("\",")
 								.append(tvName)
 								.append("\n");
 					}
 				}else {
-					m3uBuilder.append(onceLine).append("\n");
+					m3uBuilder.append(onceLine);
 				}
 			}
 		}
