@@ -68,10 +68,15 @@ public class MainController {
 		tmp = parseM3uSourceToEpg(tmp);
 		//解析指南数据
 		String rv = parseEpg(tmp);
-		//再反向恢复分组信息
-		rv = parseM3uEpgToSource(rv);
-		//返回一个临时版数据
-		return rv;
+		if (null == rv){
+			//返回一个临时版数据
+			return tmp;
+		}else {
+			//再反向恢复分组信息
+			rv = parseM3uEpgToSource(rv);
+			TV_M3U_CONTENT = rv;
+			return rv;
+		}
 	}
 
 	private static String parseEpg(String tmp) {
@@ -99,17 +104,16 @@ public class MainController {
 					Response resp = HttpUtils.get(lastM3uUrl);
 					if (resp.isSuccessful()) {
 						//获取成功了
-						TV_M3U_CONTENT = resp.body().string();
-						return TV_M3U_CONTENT;
+						return resp.body().string();
 					}
 				}
-				return tmp;
+				return null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		//返回临时版
-		return tmp;
+		return null;
 	}
 
 	private HttpResponse returnM3U(HttpRequest request, String tmp) {
