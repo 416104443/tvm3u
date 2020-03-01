@@ -1,0 +1,38 @@
+# maven ignore
+target/
+*.war
+*.tar
+*.tar.gz
+*.log.gz
+*.tar.gz.md5
+*.zip
+*.zip.md5
+
+# eclipse ignore
+.settings/
+.project
+.classpath
+
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+
+# system ignore
+.DS_Store
+Thumbs.db
+
+# other
+rebel.xml
+
+# js
+node_modules
+package-lock.json
