@@ -60,7 +60,7 @@ public class MainController {
 		//执行更新处理
 		Response resp = HttpUtils.get(SOURCE_M3U);
 		//基础数据
-		String tmp = "#EXTINF:-1 group-title=\"基础频道-源获取失败\",CCTV-1\nhttp://cctvcnch5ca.v.wscdns.com/live/cctv1_2/10793.m3u8\n";
+		String tmp = "#EXTINF:-1,group-title=\"基础频道-源获取失败\",CCTV-1\nhttp://cctvcnch5ca.v.wscdns.com/live/cctv1_2/10793.m3u8\n";
 		if (resp.isSuccessful()) {
 			//获取成功了
 			tmp = resp.body().string();
@@ -76,6 +76,7 @@ public class MainController {
 			//再反向恢复分组信息
 			rv = parseM3uEpgToSource(rv);
 			TV_M3U_CONTENT = rv;
+			System.out.println(TV_M3U_CONTENT);
 			return rv;
 		}
 	}
@@ -148,7 +149,8 @@ public class MainController {
 					String tvName = onceLine.substring(onceLine.lastIndexOf(",") + 1);
 					if (!isNullString(tvName)){
 						tvName = tvNameMap.getOrDefault(tvName, tvName);
-						m3uBuilder.append(onceLine, 0, onceLine.indexOf("group-title="))
+						String once = onceLine.replace("#EXTINF:-1 tvg-id", "#EXTINF:-1,tvg-id");
+						m3uBuilder.append(once, 0, onceLine.indexOf("group-title="))
 								.append("group-title=\"")
 								.append(tvGroupMap.getOrDefault(tvName, state_Group))
 								.append("\",")
